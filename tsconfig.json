@@ -13,7 +13,10 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "isolatedDeclarations": true,
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "test/**/*"]
 }

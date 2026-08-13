@@ -1,1 +1,1 @@
-export { default } from './frontmatter.ts'
+export { default } from '@/frontmatter'

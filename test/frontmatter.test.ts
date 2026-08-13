@@ -1,7 +1,7 @@
 import { parseMarkdown } from 'comark'
 import { describe, expect, it } from 'vitest'
 
-import frontmatter_plugin from '../src/index.ts'
+import frontmatter_plugin from '@/index'
 
 describe('TOML frontmatter', () => {
   it('parses a leading TOML block into the document frontmatter', async () => {
