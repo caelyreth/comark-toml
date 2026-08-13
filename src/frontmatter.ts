@@ -15,30 +15,32 @@ const TOML_FRONTMATTER_CLOSING = /(?:^|\r?\n)\+\+\+(?=\r?\n|$)/m
 const comark_toml_block_props =
   toml_block_props as unknown as MarkdownItPlugin
 
-type _ParsedFrontmatter = {
+interface _ParsedFrontmatter {
   content: string
-  data: Record<string, unknown>
+  data: _Properties
   frontmatter_text: string
 }
 
-function parse_toml_frontmatter(
-  markdown: string,
-): _ParsedFrontmatter | undefined {
-  if (!markdown.startsWith(TOML_FRONTMATTER_DELIMITER)) return undefined
+interface _Properties {
+  [key: string]: unknown
+}
+
+function parse_toml_frontmatter(markdown: string) {
+  if (!markdown.startsWith(TOML_FRONTMATTER_DELIMITER)) return
 
   const opening_match = TOML_FRONTMATTER_OPENING.exec(markdown)
 
-  if (!opening_match) return undefined
+  if (!opening_match) return
 
   const content_start = opening_match[0].length
   const remaining_markdown = markdown.slice(content_start)
   const closing_match = TOML_FRONTMATTER_CLOSING.exec(remaining_markdown)
 
-  if (!closing_match) return undefined
+  if (!closing_match) return
 
   const frontmatter_text = remaining_markdown.slice(0, closing_match.index)
 
-  if (!frontmatter_text) return undefined
+  if (!frontmatter_text) return
 
   return {
     content: remaining_markdown.slice(

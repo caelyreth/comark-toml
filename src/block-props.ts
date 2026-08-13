@@ -2,9 +2,13 @@ import type { PluginSimple, StateBlock } from 'markdown-exit'
 import { parse as parse_toml } from 'smol-toml'
 
 const TOML_BLOCK_PROPS_DELIMITER = '+++'
-const TOML_BLOCK_PROPS_FENCES: Readonly<Record<string, string>> = {
-  '```toml [props]': '```',
-  '~~~toml [props]': '~~~',
+
+interface _Properties {
+  [key: string]: unknown
+}
+
+interface _BlockPropsFences {
+  readonly [opening_fence: string]: string
 }
 
 interface _ComponentBlockToken {
@@ -13,7 +17,12 @@ interface _ComponentBlockToken {
   map?: [number, number] | null
 }
 
-function is_record(value: unknown): value is Record<string, unknown> {
+const TOML_BLOCK_PROPS_FENCES: _BlockPropsFences = {
+  '```toml [props]': '```',
+  '~~~toml [props]': '~~~',
+}
+
+function is_record(value: unknown): value is _Properties {
   return typeof value === 'object' && value !== null
 }
 
@@ -35,20 +44,16 @@ function is_component_block_token(
   )
 }
 
-function get_component_block_token(
-  environment: unknown,
-): _ComponentBlockToken | undefined {
-  if (!is_record(environment)) return undefined
+function get_component_block_token(environment: unknown) {
+  if (!is_record(environment)) return
 
   const block_tokens = environment.comarkBlockTokens
 
-  if (!Array.isArray(block_tokens)) return undefined
+  if (!Array.isArray(block_tokens)) return
 
   const [component_token] = block_tokens
 
-  return is_component_block_token(component_token)
-    ? component_token
-    : undefined
+  if (is_component_block_token(component_token)) return component_token
 }
 
 function get_block_line(state: StateBlock, line: number): string {
@@ -62,12 +67,10 @@ function find_closing_fence(
   start_line: number,
   end_line: number,
   closing_fence: string,
-): number | undefined {
+) {
   for (let line = start_line + 1; line < end_line; line += 1) {
     if (get_block_line(state, line) === closing_fence) return line
   }
-
-  return undefined
 }
 
 function is_component_frontmatter_position(
@@ -87,7 +90,7 @@ function encode_toml_prop_value(value: unknown): string {
 
 function apply_toml_props(
   component_token: _ComponentBlockToken,
-  props: Record<string, unknown>,
+  props: _Properties,
 ): void {
   for (const [key, value] of Object.entries(props)) {
     const encoded_value = encode_toml_prop_value(value)
