@@ -15,7 +15,9 @@ interface _Properties {
   [key: string]: unknown
 }
 
-export function parse_toml_frontmatter(markdown: string) {
+export function parse_toml_frontmatter(
+  markdown: string,
+): _TomlFrontmatter | undefined {
   if (!markdown.startsWith(TOML_DELIMITER)) return
 
   const opening_match = TOML_FRONTMATTER_OPENING.exec(markdown)

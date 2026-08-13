@@ -44,7 +44,9 @@ function is_component_block_token(
   )
 }
 
-function get_component_block_token(environment: unknown) {
+function get_component_block_token(
+  environment: unknown,
+): _ComponentBlockToken | undefined {
   if (!is_record(environment)) return
 
   const block_tokens = environment.comarkBlockTokens
@@ -67,7 +69,7 @@ function find_closing_fence(
   start_line: number,
   end_line: number,
   closing_fence: string,
-) {
+): number | undefined {
   for (let line = start_line + 1; line < end_line; line += 1) {
     if (get_block_line(state, line) === closing_fence) return line
   }
