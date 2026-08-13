@@ -239,6 +239,16 @@ describe('TOML block props', () => {
     )
   })
 
+  it('rejects unrelated blocks before reading component state', () => {
+    const state = create_block_state(['# Heading'], {
+      get comarkBlockTokens(): never {
+        throw new Error('Component state should not be read')
+      },
+    })
+
+    expect(toml_block_props_rule(state, 0, 1, false)).toBe(false)
+  })
+
   it('does not mutate props while parsing silently', () => {
     const property_writes: string[] = []
     const component_token: _ComponentBlockToken = {

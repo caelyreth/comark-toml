@@ -7,20 +7,16 @@ interface _Properties {
   [key: string]: unknown
 }
 
-interface _BlockPropsFences {
-  readonly [opening_fence: string]: string
-}
-
 interface _ComponentBlockToken {
   attrJoin: (name: string, value: string) => void
   attrSet: (name: string, value: string) => void
   map?: [number, number] | null
 }
 
-const TOML_BLOCK_PROPS_FENCES: _BlockPropsFences = {
-  '```toml [props]': '```',
-  '~~~toml [props]': '~~~',
-}
+const TOML_BACKTICK_PROPS_FENCE = '```toml [props]'
+const TOML_BACKTICK_PROPS_CLOSING_FENCE = '```'
+const TOML_TILDE_PROPS_FENCE = '~~~toml [props]'
+const TOML_TILDE_PROPS_CLOSING_FENCE = '~~~'
 
 function is_record(value: unknown): value is _Properties {
   return typeof value === 'object' && value !== null
@@ -58,10 +54,46 @@ function get_component_block_token(
   if (is_component_block_token(component_token)) return component_token
 }
 
-function get_block_line(state: StateBlock, line: number): string {
+function is_block_line(
+  state: StateBlock,
+  line: number,
+  expected_line: string,
+): boolean {
   const start = state.bMarks[line] + state.tShift[line]
 
-  return state.src.slice(start, state.eMarks[line])
+  return (
+    state.eMarks[line] - start === expected_line.length &&
+    state.src.startsWith(expected_line, start)
+  )
+}
+
+function get_toml_block_props_closing_fence(
+  state: StateBlock,
+  line: number,
+): string | undefined {
+  const start = state.bMarks[line] + state.tShift[line]
+  const opening_character = state.src.charCodeAt(start)
+
+  if (
+    opening_character === 43 &&
+    is_block_line(state, line, TOML_DELIMITER)
+  ) {
+    return TOML_DELIMITER
+  }
+
+  if (
+    opening_character === 96 &&
+    is_block_line(state, line, TOML_BACKTICK_PROPS_FENCE)
+  ) {
+    return TOML_BACKTICK_PROPS_CLOSING_FENCE
+  }
+
+  if (
+    opening_character === 126 &&
+    is_block_line(state, line, TOML_TILDE_PROPS_FENCE)
+  ) {
+    return TOML_TILDE_PROPS_CLOSING_FENCE
+  }
 }
 
 function find_closing_fence(
@@ -71,7 +103,7 @@ function find_closing_fence(
   closing_fence: string,
 ): number | undefined {
   for (let line = start_line + 1; line < end_line; line += 1) {
-    if (get_block_line(state, line) === closing_fence) return line
+    if (is_block_line(state, line, closing_fence)) return line
   }
 }
 
@@ -107,17 +139,18 @@ const markdown_exit_toml_block_props: PluginSimple = (markdown_it) => {
     'code',
     'comark_toml_block_props',
     (state, start_line, end_line, silent) => {
+      const closing_fence = get_toml_block_props_closing_fence(
+        state,
+        start_line,
+      )
+
+      if (!closing_fence) return false
+
       const component_token = get_component_block_token(state.env)
 
       if (!component_token) return false
 
-      const opening_fence = get_block_line(state, start_line)
-      const is_frontmatter_style = opening_fence === TOML_DELIMITER
-      const closing_fence = is_frontmatter_style
-        ? TOML_DELIMITER
-        : TOML_BLOCK_PROPS_FENCES[opening_fence]
-
-      if (!closing_fence) return false
+      const is_frontmatter_style = closing_fence === TOML_DELIMITER
 
       if (
         is_frontmatter_style &&
