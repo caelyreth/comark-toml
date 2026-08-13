@@ -4,6 +4,10 @@
   "license": "MIT",
   "author": "Yu <me@iki.moe>",
   "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "tsdown",
     "fmt": "oxfmt",
@@ -31,9 +35,5 @@
   "engines": {
     "node": ">=22.18.0"
   },
-  "packageManager": "pnpm@11.20.0",
-  "exports": {
-    ".": "./dist/index.mjs",
-    "./package.json": "./package.json"
-  }
+  "packageManager": "pnpm@11.20.0"
 }

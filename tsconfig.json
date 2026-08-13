@@ -9,6 +9,7 @@
     "checkJs": false,
     "skipLibCheck": true,
     "noEmit": true,
+    "declaration": true,
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "isolatedDeclarations": true,
