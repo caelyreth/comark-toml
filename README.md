@@ -26,6 +26,19 @@ import toml from 'comark-toml'
 const document = await parseMarkdown(content, { plugins: [toml()] })
 ```
 
+```md
++++
+title = "Hello, TOML"
+published = true
+tags = ["comark", "toml"]
+
+[author]
+name = "Ada"
++++
+
+# Hello
+```
+
 Component props also support fenced TOML blocks:
 
 ```md
