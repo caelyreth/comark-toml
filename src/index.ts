@@ -1,1 +1,1 @@
-console.log('Hello World')
+export { default } from './frontmatter.ts'

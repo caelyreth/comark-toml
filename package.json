@@ -16,14 +16,21 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
+  "dependencies": {
+    "smol-toml": "catalog:r"
+  },
   "devDependencies": {
     "@types/node": "catalog:t",
     "@vitest/coverage-v8": "catalog:x",
+    "comark": "catalog:r",
     "oxfmt": "catalog:x",
     "oxlint": "catalog:x",
     "oxlint-tsgolint": "catalog:x",
     "tsdown": "catalog:x",
     "vitest": "catalog:x"
+  },
+  "peerDependencies": {
+    "comark": "catalog:r"
   },
   "devEngines": {
     "packageManager": {
