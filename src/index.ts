@@ -38,5 +38,4 @@ const comark_toml_plugin: ComarkPluginFactory<unknown> =
     },
   }))
 
-export { comark_toml_block_props as toml_block_props }
 export default comark_toml_plugin
