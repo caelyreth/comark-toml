@@ -1,2 +1,3 @@
 # normalize end of line
 * text=auto eol=lf
+test/fixtures/frontmatter/toml.crlf.md text eol=crlf
