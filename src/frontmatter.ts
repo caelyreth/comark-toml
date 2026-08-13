@@ -1,4 +1,4 @@
-import type { ComarkPluginFactory } from 'comark'
+import type { ComarkPluginFactory, MarkdownItPlugin } from 'comark'
 import {
   defineComarkPlugin as define_comark_plugin,
   parseFrontmatter as parse_comark_frontmatter,
@@ -10,6 +10,10 @@ import toml_block_props from '@/block-props'
 const TOML_FRONTMATTER_DELIMITER = '+++'
 const TOML_FRONTMATTER_OPENING = /^\+\+\+\r?\n/
 const TOML_FRONTMATTER_CLOSING = /(?:^|\r?\n)\+\+\+(?=\r?\n|$)/m
+
+// Comark currently types this hook for markdown-it despite using markdown-exit.
+const comark_toml_block_props =
+  toml_block_props as unknown as MarkdownItPlugin
 
 type _ParsedFrontmatter = {
   content: string
@@ -58,7 +62,7 @@ function parse_yaml_frontmatter(markdown: string): _ParsedFrontmatter {
 const frontmatter_plugin: ComarkPluginFactory<unknown> =
   define_comark_plugin(() => ({
     name: 'frontmatter',
-    markdownItPlugins: [toml_block_props],
+    markdownItPlugins: [comark_toml_block_props],
     pre(state) {
       const parsed_frontmatter =
         parse_toml_frontmatter(state.markdown) ??

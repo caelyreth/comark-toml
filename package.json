@@ -24,6 +24,7 @@
     "@types/node": "catalog:t",
     "@vitest/coverage-v8": "catalog:x",
     "comark": "catalog:r",
+    "markdown-exit": "catalog:r",
     "oxfmt": "catalog:x",
     "oxlint": "catalog:x",
     "oxlint-tsgolint": "catalog:x",

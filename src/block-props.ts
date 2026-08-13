@@ -1,5 +1,4 @@
-import type MarkdownIt = require('markdown-it')
-
+import type { PluginSimple, StateBlock } from 'markdown-exit'
 import { parse as parse_toml } from 'smol-toml'
 
 const TOML_BLOCK_PROPS_DELIMITER = '+++'
@@ -8,7 +7,7 @@ const TOML_BLOCK_PROPS_FENCES: Readonly<Record<string, string>> = {
   '~~~toml [props]': '~~~',
 }
 
-type _ComponentBlockToken = {
+interface _ComponentBlockToken {
   attrJoin: (name: string, value: string) => void
   attrSet: (name: string, value: string) => void
   map?: [number, number] | null
@@ -52,17 +51,14 @@ function get_component_block_token(
     : undefined
 }
 
-function get_block_line(
-  state: MarkdownIt.StateBlock,
-  line: number,
-): string {
+function get_block_line(state: StateBlock, line: number): string {
   const start = state.bMarks[line] + state.tShift[line]
 
   return state.src.slice(start, state.eMarks[line])
 }
 
 function find_closing_fence(
-  state: MarkdownIt.StateBlock,
+  state: StateBlock,
   start_line: number,
   end_line: number,
   closing_fence: string,
@@ -101,7 +97,7 @@ function apply_toml_props(
   }
 }
 
-const toml_block_props: MarkdownIt.PluginSimple = (markdown_it) => {
+const toml_block_props: PluginSimple = (markdown_it) => {
   markdown_it.block.ruler.after(
     'code',
     'comark_toml_block_props',

@@ -3,6 +3,7 @@ shellEmulator: true
 catalogs:
   r:
     'comark': ^0.6.2
+    'markdown-exit': 1.1.0-beta.2
     'smol-toml': ^1.8.0
   x:
     '@vitest/coverage-v8': ^4.1.10
