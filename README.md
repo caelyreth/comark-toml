@@ -56,6 +56,7 @@ Content
 - Document TOML frontmatter must start with `+++`; Comark's native `---` YAML frontmatter remains available.
 - Use either TOML or YAML frontmatter for a document. They are not merged.
 - Frontmatter-style TOML props (`+++`) must appear immediately after a component opener. Fenced props support both backticks and tildes.
+- If TOML frontmatter is followed immediately by YAML frontmatter, Comark consumes the YAML block too, but `comark-toml` restores TOML as the final document frontmatter. The YAML block is removed rather than merged or rendered.
 
 ### License
 
