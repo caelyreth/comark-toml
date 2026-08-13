@@ -20,6 +20,7 @@
     "smol-toml": "catalog:r"
   },
   "devDependencies": {
+    "@types/markdown-it": "catalog:t",
     "@types/node": "catalog:t",
     "@vitest/coverage-v8": "catalog:x",
     "comark": "catalog:r",

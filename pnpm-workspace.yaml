@@ -12,4 +12,5 @@ catalogs:
     'tsdown': ^0.22.14
     'vitest': ^4.1.10
   t:
+    '@types/markdown-it': ^14.1.2
     '@types/node': ^26.2.0

@@ -5,6 +5,8 @@ import {
 } from 'comark/parse'
 import { parse as parse_toml } from 'smol-toml'
 
+import toml_block_props from '@/block-props'
+
 const TOML_FRONTMATTER_DELIMITER = '+++'
 const TOML_FRONTMATTER_OPENING = /^\+\+\+\r?\n/
 const TOML_FRONTMATTER_CLOSING = /(?:^|\r?\n)\+\+\+(?=\r?\n|$)/m
@@ -56,6 +58,7 @@ function parse_yaml_frontmatter(markdown: string): _ParsedFrontmatter {
 const frontmatter_plugin: ComarkPluginFactory<unknown> =
   define_comark_plugin(() => ({
     name: 'frontmatter',
+    markdownItPlugins: [toml_block_props],
     pre(state) {
       const parsed_frontmatter =
         parse_toml_frontmatter(state.markdown) ??
