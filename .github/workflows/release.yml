@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  verify-tag:
+    name: Verify tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify tag
+        run: |
+          set -euo pipefail
+
+          DEFAULT_BRANCH="${{ github.event.repository.default_branch }}"
+          TAG_COMMIT="$(git rev-list -n 1 "$GITHUB_REF")"
+
+          git merge-base --is-ancestor "$TAG_COMMIT" "origin/$DEFAULT_BRANCH" || {
+            echo "Tag must be on $DEFAULT_BRANCH"
+            exit 1
+          }
+
+  quality:
+    name: Typecheck, lint and test
+    needs: verify-tag
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  release:
+    name: Release
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Upgrade npm
+        run: npm i -g npm@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish packages
+        run: pnpm run publish:ci
+
+      - name: Create GitHub release
+        run: pnpm dlx changelogithub --contributors --emoji false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
