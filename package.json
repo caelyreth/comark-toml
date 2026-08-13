@@ -1,9 +1,26 @@
 {
   "name": "comark-toml",
   "version": "0.1.0",
+  "description": "Comark plugin for TOML frontmatter and block props support",
+  "keywords": [
+    "comark",
+    "toml"
+  ],
+  "homepage": "https://github.com/caelyreth/comark-toml#readme",
+  "bugs": {
+    "url": "https://github.com/caelyreth/comark-toml/issues"
+  },
   "license": "MIT",
   "author": "Yu <me@iki.moe>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caelyreth/comark-toml.git"
+  },
+  "files": [
+    "dist"
+  ],
   "type": "module",
+  "types": "./index.d.mts",
   "exports": {
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
