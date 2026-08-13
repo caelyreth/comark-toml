@@ -28,16 +28,15 @@ const document = await parseMarkdown(content, { plugins: [toml()] })
 
 Component props also support fenced TOML blocks:
 
-````md
+```md
 ::card
-
-```toml [props]
++++
 title = "A component"
-```
++++
 
 Content
 ::
-````
+```
 
 ## Notes
 
