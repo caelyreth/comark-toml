@@ -9,16 +9,32 @@ import tilde_document from '@test/fixtures/block-props/tilde.toml.md?raw'
 import unterminated_fence_document from '@test/fixtures/block-props/unterminated-fence.toml.md?raw'
 import yaml_document from '@test/fixtures/block-props/yaml.md?raw'
 import { parseMarkdown } from 'comark'
+import { defineComarkPlugin as define_comark_plugin } from 'comark/parse'
 import { TomlError } from 'smol-toml'
 import { describe, expect, it } from 'vitest'
 
-import frontmatter_plugin from '@/index'
+import frontmatter_plugin, { toml_block_props } from '@/index'
 
 function parse_toml_document(document: string) {
   return parseMarkdown(document, { plugins: [frontmatter_plugin()] })
 }
 
+const block_props_plugin = define_comark_plugin(() => ({
+  name: 'toml-block-props',
+  markdownItPlugins: [toml_block_props],
+}))
+
 describe('TOML block props', () => {
+  it('exports the block-props adapter for standalone registration', async () => {
+    const parsed_document = await parseMarkdown(tilde_document, {
+      plugins: [block_props_plugin()],
+    })
+
+    expect(parsed_document.nodes).toEqual([
+      ['notice', { level: '2', title: 'Tilde fence' }, 'Body'],
+    ])
+  })
+
   it('parses fenced props with nested values', async () => {
     const parsed_document = await parse_toml_document(fenced_document)
 
