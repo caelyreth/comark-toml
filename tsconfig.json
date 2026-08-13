@@ -11,6 +11,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
+    "isolatedDeclarations": true,
     "types": ["node"]
   },
   "include": ["src/**/*"]
