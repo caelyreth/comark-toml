@@ -4,5 +4,14 @@ node_modules
 # dev
 dist
 
+# editor
+/.zed
+/.vscode
+
+# agents
+/.codex
+/.claude
+/.agents
+
 # os
 .DS_Store
