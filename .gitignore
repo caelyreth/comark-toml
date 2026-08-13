@@ -1,0 +1,8 @@
+# runtime + deps
+node_modules
+
+# dev
+dist
+
+# os
+.DS_Store

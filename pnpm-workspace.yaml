@@ -1,0 +1,12 @@
+shellEmulator: true
+
+catalogs:
+  x:
+    '@vitest/coverage-v8': ^4.1.10
+    'oxfmt': ^0.51.0
+    'oxlint': ^1.78.0
+    'oxlint-tsgolint': '^7.0.2001'
+    'tsdown': ^0.22.14
+    'vitest': ^4.1.10
+  t:
+    '@types/node': ^26.2.0

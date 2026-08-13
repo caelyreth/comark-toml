@@ -1,0 +1,58 @@
+import { defineConfig } from 'oxlint'
+
+export default defineConfig({
+  plugins: [
+    'eslint',
+    'import',
+    'typescript',
+    'oxc',
+    'jsdoc',
+    'promise',
+    'unicorn',
+    'node',
+  ],
+  options: {
+    typeAware: true,
+    typeCheck: true,
+  },
+  rules: {
+    // blocking
+    'eqeqeq': 'error',
+    'no-empty': 'error',
+    'no-plusplus': 'error',
+    'max-depth': ['error', { max: 3 }],
+    'complexity': ['error', { max: 10 }],
+    'oxc/no-accumulating-spread': 'error',
+    'oxc/no-barrel-file': 'error',
+    'unicorn/no-lonely-if': 'error',
+    'typescript/no-deprecated': 'error',
+    'typescript/no-explicit-any': 'error',
+    'typescript/no-misused-promises': 'error',
+    'typescript/no-unsafe-argument': 'error',
+    'typescript/no-unsafe-call': 'error',
+    'typescript/prefer-includes': 'error',
+    'typescript/prefer-nullish-coalescing': 'error',
+    // valuable
+    'array-callback-return': 'warn',
+    'no-await-in-loop': 'warn',
+    'jsdoc/require-yields': 'warn',
+    'jsdoc/require-yields-type': 'warn',
+    'typescript/no-confusing-void-expression': 'warn',
+    // style
+    'arrow-body-style': 'warn',
+    'curly': ['warn', 'multi-line', 'consistent'],
+    'object-shorthand': 'warn',
+    'prefer-const': 'warn',
+    'prefer-destructuring': 'warn',
+    'prefer-object-has-own': 'warn',
+    'prefer-object-spread': 'warn',
+    'prefer-spread': 'warn',
+    'prefer-template': 'warn',
+    'unicorn/filename-case': 'warn',
+    'typescript/dot-notation': 'warn',
+    'typescript/prefer-find': 'warn',
+    'typescript/unified-signatures': 'warn',
+    'typescript/consistent-type-imports': 'warn',
+    'typescript/consistent-type-exports': 'warn',
+  },
+})

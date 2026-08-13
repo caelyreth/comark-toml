@@ -1,0 +1,35 @@
+{
+  "name": "comark-toml",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Yu <me@iki.moe>",
+  "type": "module",
+  "scripts": {
+    "build": "tsdown",
+    "fmt": "oxfmt",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:t",
+    "@vitest/coverage-v8": "catalog:x",
+    "oxfmt": "catalog:x",
+    "oxlint": "catalog:x",
+    "oxlint-tsgolint": "catalog:x",
+    "tsdown": "catalog:x",
+    "vitest": "catalog:x"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.20.0",
+      "onFail": "warn"
+    }
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "packageManager": "pnpm@11.20.0"
+}
