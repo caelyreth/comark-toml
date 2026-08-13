@@ -100,7 +100,7 @@ function apply_toml_props(
   }
 }
 
-const toml_block_props: PluginSimple = (markdown_it) => {
+const markdown_exit_toml_block_props: PluginSimple = (markdown_it) => {
   markdown_it.block.ruler.after(
     'code',
     'comark_toml_block_props',
@@ -149,4 +149,4 @@ const toml_block_props: PluginSimple = (markdown_it) => {
   )
 }
 
-export default toml_block_props
+export default markdown_exit_toml_block_props
