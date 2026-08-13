@@ -10,14 +10,48 @@ import crlf_toml_document from '@test/fixtures/frontmatter/toml.crlf.md?raw'
 import toml_document from '@test/fixtures/frontmatter/toml.md?raw'
 import yaml_document from '@test/fixtures/frontmatter/yaml.md?raw'
 import { parseMarkdown } from 'comark'
+import type { ComarkParsePreState } from 'comark'
 import { TomlError } from 'smol-toml'
 import { describe, expect, it } from 'vitest'
 
+import { parse_toml_frontmatter } from '@/frontmatter'
 import frontmatter_plugin from '@/index'
 
 describe('TOML frontmatter', () => {
   it('uses a dedicated plugin name', () => {
     expect(frontmatter_plugin().name).toBe('comark-toml')
+  })
+
+  it.each([
+    ['an opening delimiter without a line feed', '+++\rtitle = "Ignored"'],
+    ['an empty TOML block', '+++\n+++\n'],
+  ])(
+    'does not recognize %s as TOML frontmatter',
+    (_description, markdown) => {
+      expect(parse_toml_frontmatter(markdown)).toBeUndefined()
+    },
+  )
+
+  it('counts frontmatter from a parser state without parsed lines', async () => {
+    const state: ComarkParsePreState = {
+      markdown: '+++\ntitle = "Line accounting"\n+++\n# Heading',
+      options: {},
+    }
+
+    await frontmatter_plugin().pre!(state)
+
+    expect(state.parsedLines).toBe(2)
+  })
+
+  it('does not count frontmatter lines without a markdown body', async () => {
+    const state: ComarkParsePreState = {
+      markdown: '+++\ntitle = "No body"\n+++',
+      options: {},
+    }
+
+    await frontmatter_plugin().pre!(state)
+
+    expect(state.parsedLines).toBeUndefined()
   })
 
   it('parses a leading TOML block into the document frontmatter', async () => {

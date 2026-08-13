@@ -87,7 +87,7 @@ function is_component_frontmatter_position(
 function encode_toml_prop_value(value: unknown): string {
   if (typeof value === 'string') return value
 
-  return JSON.stringify(value) ?? ''
+  return JSON.stringify(value) as string
 }
 
 function apply_toml_props(
