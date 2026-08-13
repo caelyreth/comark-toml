@@ -16,6 +16,10 @@ import { describe, expect, it } from 'vitest'
 import frontmatter_plugin from '@/index'
 
 describe('TOML frontmatter', () => {
+  it('uses a dedicated plugin name', () => {
+    expect(frontmatter_plugin().name).toBe('comark-toml')
+  })
+
   it('parses a leading TOML block into the document frontmatter', async () => {
     const parsed_document = await parseMarkdown(toml_document, {
       plugins: [frontmatter_plugin()],
@@ -54,7 +58,7 @@ describe('TOML frontmatter', () => {
     })
   })
 
-  it('preserves YAML frontmatter support', async () => {
+  it('defers YAML frontmatter to Comark', async () => {
     const parsed_document = await parseMarkdown(yaml_document, {
       plugins: [frontmatter_plugin()],
     })
