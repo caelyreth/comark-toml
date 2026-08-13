@@ -1,7 +1,7 @@
 import type { PluginSimple, StateBlock } from 'markdown-exit'
 import { parse as parse_toml } from 'smol-toml'
 
-const TOML_BLOCK_PROPS_DELIMITER = '+++'
+import { TOML_DELIMITER } from '@/constants'
 
 interface _Properties {
   [key: string]: unknown
@@ -110,10 +110,9 @@ const markdown_exit_toml_block_props: PluginSimple = (markdown_it) => {
       if (!component_token) return false
 
       const opening_fence = get_block_line(state, start_line)
-      const is_frontmatter_style =
-        opening_fence === TOML_BLOCK_PROPS_DELIMITER
+      const is_frontmatter_style = opening_fence === TOML_DELIMITER
       const closing_fence = is_frontmatter_style
-        ? TOML_BLOCK_PROPS_DELIMITER
+        ? TOML_DELIMITER
         : TOML_BLOCK_PROPS_FENCES[opening_fence]
 
       if (!closing_fence) return false

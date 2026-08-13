@@ -1,7 +1,8 @@
 import { parseFrontmatter as parse_comark_frontmatter } from 'comark/parse'
 import { parse as parse_toml } from 'smol-toml'
 
-const TOML_FRONTMATTER_DELIMITER = '+++'
+import { TOML_DELIMITER } from '@/constants'
+
 const TOML_FRONTMATTER_OPENING = /^\+\+\+\r?\n/
 const TOML_FRONTMATTER_CLOSING = /(?:^|\r?\n)\+\+\+(?=\r?\n|$)/m
 
@@ -16,7 +17,7 @@ interface _Properties {
 }
 
 function parse_toml_frontmatter(markdown: string) {
-  if (!markdown.startsWith(TOML_FRONTMATTER_DELIMITER)) return
+  if (!markdown.startsWith(TOML_DELIMITER)) return
 
   const opening_match = TOML_FRONTMATTER_OPENING.exec(markdown)
 
